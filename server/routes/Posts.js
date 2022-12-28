@@ -1,8 +1,6 @@
 const express = require('express')
 const router = express.Router()
 const {Posts} = require('../models')
-
-//image upload
 const multer = require('multer')
 const path = require('path')
 

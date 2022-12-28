@@ -9,14 +9,17 @@ const path = require('path')
 app.use(cors())
 
 //static Image Folder
-// app.use('/Images', express.static(path.join(__dirname ,'./Images')))
 app.use('/Images/Posts', express.static(path.join(__dirname ,'./Images/Posts')))
+app.use('/Images/Users', express.static(path.join(__dirname ,'./Images/Users')))
 //Routers
 const postRouter =  require('./routes/Posts')
 app.use('/posts',postRouter)
 
 const commentRouter = require('./routes/Comments')
 app.use('/comments', commentRouter)
+
+const userRouter = require('./routes/Users')
+app.use('/auth',userRouter)
 //port
 const PORT = process.env.PORT || 4001
 

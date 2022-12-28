@@ -46,19 +46,19 @@ const Post = () => {
               rows="4" placeholder='Comment...' value={newComment}
               onChange={(e)=>{setNewComment(e.target.value)}}
               />
-          <button className='btn btn-sm btn-outline-primary mt-1' onClick={addComment}>Add</button>
+          <button className='btn btn-sm btn-outline-primary mt-1 float-end' onClick={addComment}>Add</button>
         </div>
-        <div className="listOfComments mt-2">
+        <div className="listOfComments mt-5">
           
           {comments.map((comment) =>(
-            <div key={comment.id} className="border border-3 col-6 col-sm-10 mt-3 px-2 rounded">
+            <div key={comment.id} className="border border-3 col-6 col-sm-10 px-2 rounded mt-1">
               <img src="https://i.imgur.com/hczKIze.jpg" width="30" className="user-img rounded-circle mr-2"></img>
-              <span>
+              <span >
                 <small className="fw-bold text-primary mx-1">{comment.commenter}</small>
                 <small className="fw-bold">{comment.commentBody}</small>
-                <small className='float-end' role="button"
-                data-bs-toggle="tooltip" data-bs-placement="top" title="Remove"
-                onClick={deleteComment}>x</small>
+                <button className='btn btn-close float-end mt-1' 
+                aria-label="Close" data-toggle="tooltip" title="Remove"
+                onClick={deleteComment}></button>
               </span>
             </div>
           ))}

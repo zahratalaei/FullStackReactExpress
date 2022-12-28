@@ -19,4 +19,12 @@ router.get('/:postId',async(req,res)=>{
      const comments = await Comments.findAll({where:{PostId : postId}})
      res.json(comments)
 })
+
+// delete a comment
+router.delete('/:commentId', async (req,res)=>{
+     const commentId = req.params.commentId
+
+     await Comments.destroy({where:{id:commentId}})
+     res.json("Deleted comment")
+})
 module.exports = router
