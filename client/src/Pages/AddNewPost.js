@@ -45,19 +45,14 @@ const AddNewPost = () => {
         <Form className='d-flex flex-column justify-content-center col-sm-8 col-md-6 col-lg-4 rounded border border-3 border-primary p-2' >
           <label htmlFor="title">Title: </label>
           <ErrorMessage component="span" name='title'/>
-          {/* <input type="text" name="title" onChange={(e)=>setTitle(e.target.value)} /> */}
           <Field autoComplete='off' name="title" />
           
           <label htmlFor="desc">Description: </label>
           <ErrorMessage component="span" name='desc'/>
-          {/* <input type="text" name="desc" onChange={(e)=>setDesc(e.target.value)} /> */}
-
           <Field autoComplete='off' name="desc" />
           
           <label htmlFor="author">Author: </label>
           <ErrorMessage component="span" name='author'/>
-          {/* <input type="text" name="author" onChange={(e)=>setAuthor(e.target.value)} /> */}
-
           <Field autoComplete='off' name="author" />
           
           <label htmlFor="image">Image: </label>
@@ -65,8 +60,6 @@ const AddNewPost = () => {
           <input type="file" name='image' id='image' className='mb-2' onChange={(e)=>{  
            setImage(e.target.files[0])
           }} />
- 
-          {/* <Field autoComplete='off' name="image" type="file" /> */}
           {/* <Button type="submit" variant="primary" className='mt-2'>Create post</Button> */}
           <button type='submit'>Create Post</button>
         </Form>

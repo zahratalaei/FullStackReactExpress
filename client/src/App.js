@@ -5,6 +5,8 @@ import Home from './Pages/Home';
 import {Routes, Route} from 'react-router-dom'
 import AddNewPost from './Pages/AddNewPost';
 import Post from './Pages/Post';
+import SignUp from './Pages/SignUp';
+import SignIn from './Pages/SignIn';
 function App() {
   
   return (
@@ -14,6 +16,8 @@ function App() {
           <Route index element={<Home/>} />
           <Route path='/addNewPost' element={<AddNewPost/>} />
           <Route path='/post/:id' element={<Post/>} />
+          <Route path='/signUp' element={<SignUp/>} />
+          <Route path='/signIn' element={<SignIn/>} />
         </Route>
       </Routes>
 

@@ -11,6 +11,8 @@ const Layout = () => {
           <Nav className='me-auto d-flex flex-row justify-content-evenly' >
                <Nav.Link eventKey="1" as={Link} to="/" >Home</Nav.Link>
                <Nav.Link eventKey="2" as={Link} to="/addNewPost">Add new post</Nav.Link>
+               <Nav.Link eventKey="3" as={Link} to="/signUp">Sign up</Nav.Link>
+               <Nav.Link eventKey="4" as={Link} to="signIn" >Sign in</Nav.Link>
           </Nav>
      </Container>
     </Navbar>

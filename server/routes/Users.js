@@ -4,6 +4,7 @@ const {Users} = require('../models')
 const multer = require('multer')
 const path = require('path')
 const bcrypt = require('bcrypt')
+// const {sign} = require('jsonwebtoken')
 //upload photo function
 const storage = multer.diskStorage({
      destination:(req,file,cb)=>{
@@ -32,7 +33,7 @@ const upload = multer({
 
 router.post('/',upload,async(req,res)=>{
      const {username, password} = req.body
-     const photo = req.file.path
+     const photo = req.file ? req.file.path :''
      bcrypt.hash(password, 10).then((hash)=>{
           Users.create({
                username: username,
@@ -44,13 +45,15 @@ router.post('/',upload,async(req,res)=>{
 
 })
 
-router.post('/login', async(req,res)=>{
+router.post('/signIn', async(req,res)=>{
      const{username, password} =req.body;
      const user = await Users.findOne({where:{username:username}})
      if(!user) res.json({error:"User doesn't Exit"})
      bcrypt.compare(password,user.password).then((match)=>{
           if(!match) res.json({error:"wrong Username and Password Combination"})
-          res.json("You logged in")
+          // const accessToken = sign({username:user.username,id:user.id},"importantsecret")
+          // res.json(accessToken)
+          res.json("signed in")
      })
 })
 

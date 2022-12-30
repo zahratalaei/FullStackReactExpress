@@ -51,7 +51,7 @@ const Post = () => {
         <div className="listOfComments mt-5">
           
           {comments.map((comment) =>(
-            <div key={comment.id} className="border border-3 col-6 col-sm-10 px-2 rounded mt-1">
+            <div key={comment.id} className="border border-3 col-6 col-sm-10 px-2 rounded mt-1 py-1">
               <img src="https://i.imgur.com/hczKIze.jpg" width="30" className="user-img rounded-circle mr-2"></img>
               <span >
                 <small className="fw-bold text-primary mx-1">{comment.commenter}</small>
