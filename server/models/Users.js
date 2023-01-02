@@ -9,7 +9,8 @@ module.exports = (sequelize,DataType)=>{
                allowNull: false
           },
           photo:{
-               type: DataType.STRING
+               type: DataType.STRING,
+               defaultValue:"..\\Images\\Users\\download.gif"
           }
      })
      Users.associate = (models) => {

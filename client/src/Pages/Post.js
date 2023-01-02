@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Image } from 'react-bootstrap'
 import axios from 'axios'
+import defaultImage from '../images/default.jpg'
+import idPhoto from "../images/defaultId.jpg"
+import { AuthContext } from '../helper/AuthContext'
 
 const Post = () => {
-     const {id} = useParams()
-     const[post,setPost] = useState({})
-     const[comments,setComments] = useState([])
-     const[newComment,setNewComment] = useState('')
-
+    const {id} = useParams()
+    const[post,setPost] = useState({})
+    const[comments,setComments] = useState([])
+    const[newComment,setNewComment] = useState('')
+    const{auth} = useContext(AuthContext)
 
      useEffect(()=>{
           axios.get(`http://localhost:4001/posts/post/${id}`)
@@ -16,28 +19,49 @@ const Post = () => {
           axios.get(`http://localhost:4001/comments/${id}`)
           .then(res => setComments(res.data))
           
-     },[])
+     },[]) 
     //add comment
      const addComment = ()=>{
-      axios.post(`http://localhost:4001/comments/addComment`,{commentBody:newComment,commenter:"Zahra",PostId:id})
+      axios.post(`http://localhost:4001/comments/addComment`,{
+        commentBody:newComment,
+        PostId:id,
+      },{
+        headers:{
+          accessToken: localStorage.getItem("accessToken")
+        }
+      })
       .then((res) =>{
-        const commentToAdd = {commentBody:newComment,author:"Zahra"}
-        setComments([...comments,commentToAdd])
-        setNewComment('')
+        if(res.data.error){
+          alert(res.data.error)
+        }else{
+          const commentToAdd = {commentBody:newComment,username:auth.username}
+          console.log(commentToAdd)
+          setComments([...comments,commentToAdd])
+         
+          setNewComment('')
+        }
       } )
-
+      
      }
      //delete comment
-     const deleteComment = ()=>{
-      
+     const deleteComment = (id)=>{
+      axios.delete(`http://localhost:4001/comments/${id}`,{headers:{
+        accessToken: localStorage.getItem("accessToken")
+      }})
+      .then(() =>{
+        setComments(comments.filter((comment)=>{
+          return comment.id !== id
+        }))
+      } )
      }
   return (
     <div className='container mt-3'>
      <div className='post'>
-     <Image src={`http://localhost:3000/${post.image}`} rounded responsive="true" className='col-10'/>
+     <Image src={(post.image!=="" | post.image !== null) ? `http://localhost:3000/${post.image}` :defaultImage } rounded responsive="true" className='col-10'/>
      <h2>{post.title}</h2>
      <p>{post.desc}</p>
-     <label htmlFor="">Created by: {post.author}</label>
+     {/* <label htmlFor="">Created by: {post.author}</label> */}
+     <a href="#" className="icon-link mr-3"><i className="fa fa-pencil-square-o"></i>{post.author}</a>
      </div>
      <div className="comment mt-4">
       <h6>Leave your comment</h6>
@@ -50,15 +74,15 @@ const Post = () => {
         </div>
         <div className="listOfComments mt-5">
           
-          {comments.map((comment) =>(
-            <div key={comment.id} className="border border-3 col-6 col-sm-10 px-2 rounded mt-1 py-1">
-              <img src="https://i.imgur.com/hczKIze.jpg" width="30" className="user-img rounded-circle mr-2"></img>
+          {comments.length > 0 && comments.map((comment) =>(
+            <div key={comment.index} className="border border-3 col-6 col-sm-10 px-2 rounded mt-1 py-1">
+              <img src={idPhoto} width="30" className="user-img rounded-circle mr-2"></img>
               <span >
-                <small className="fw-bold text-primary mx-1">{comment.commenter}</small>
+                <small className="fw-bold text-primary mx-1">{comment.username}</small>
                 <small className="fw-bold">{comment.commentBody}</small>
                 <button className='btn btn-close float-end mt-1' 
                 aria-label="Close" data-toggle="tooltip" title="Remove"
-                onClick={deleteComment}></button>
+                onClick={()=>deleteComment(comment.id)}></button>
               </span>
             </div>
           ))}

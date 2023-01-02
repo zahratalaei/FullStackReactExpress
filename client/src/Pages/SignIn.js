@@ -1,9 +1,12 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const SignIn = () => {
      const [username, setUsername] = useState('')
      const [password, setPassword] = useState('')
+
+     const navigate = useNavigate()
      const signIn = ()=>{
           const data = {username:username, password:password}
           axios.post('http://localhost:4001/auth/signIn',data)
@@ -11,14 +14,15 @@ const SignIn = () => {
                if(res.data.error){
                     alert(res.data.error)
                }else{
-                    localStorage.setItem("accessToken",res.data)
+                    localStorage.setItem("accessToken",res.data.token)               
                }
+               navigate('/')
           })
-          console.log("signed")
+          
      }
   return (
     <div className='d-flex justify-content-center mt-3'>
-     <div className="signInContainer 2022-12-30 10:21:39d-flex flex-column justify-content-center col-sm-8 col-md-6 col-lg-4 rounded border border-3 border-primary p-2">
+     <div className="signInContainer d-flex flex-column justify-content-center col-sm-8 col-md-6 col-lg-4 rounded border border-3 border-primary p-2">
           <label htmlFor="username">Username:</label>
           <input type="text" className='p-1 rounded' onChange={(e)=>{setUsername(e.target.value)}} />
           

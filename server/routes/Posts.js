@@ -3,6 +3,7 @@ const router = express.Router()
 const {Posts} = require('../models')
 const multer = require('multer')
 const path = require('path')
+const { validateToken } = require('../middlewares/AuthMiddleware')
 
 //upload image function
 const storage = multer.diskStorage({
@@ -16,9 +17,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({
      storage:storage,
-     limits: { fileSize: '1000000' },
-    fileFilter: (req, file, cb) => {
-        const fileTypes = /jpeg|jpg|png|gif/
+     limits:{fileSize:'1000000'},
+     fileFilter: (req,file,cb) => {
+          const fileTypes = /jpeg|jpg|png|gif/
         const mimeType = fileTypes.test(file.mimetype)  
         const extname = fileTypes.test(path.extname(file.originalname))
 
@@ -27,6 +28,7 @@ const upload = multer({
         }
         cb('Give proper files formate to upload')
     }
+     
 }).single('image')
 // get all posts
 router.get("/",async(req,res)=>{
@@ -36,16 +38,21 @@ router.get("/",async(req,res)=>{
 })
 
 // create new post
-router.post("/addPost",upload,async(req,res)=>{
-     const post ={
+router.post("/addPost",validateToken, upload,async(req,res)=>{
+     const post = {
           title: req.body.title,
           desc: req.body.desc,
-          author:req.body.author,
-          image: req.file.path
-     } 
+          image: req.file.path,
+          // author: req.user.username,
+          // UserId:req.user.id
+     }
+     post.author = req.user.username
+     post.UserId = req.user.id
      const posts = await Posts.create(post)
      // res.status(200).send(posts)
-     res.json(post)
+     res.json(posts)
+     console.log(post);
+
 })
 
 // get a post by id

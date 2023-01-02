@@ -1,34 +1,36 @@
-import React ,{useState}from 'react'
+import React ,{useState,useContext} from 'react'
 import{Formik,Form,Field,ErrorMessage} from 'formik'
 // import {Button} from 'react-bootstrap'
 import * as Yup from 'yup'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
-
+import {AuthContext} from '../helper/AuthContext'
 
 
 const AddNewPost = () => {
-  // const[title,setTitle] = useState('')
-  // const[desc,setDesc] = useState('')
-  // const[author,setAuthor] = useState('')
+  const {auth} = useContext(AuthContext)
   const[image,setImage] = useState('')
   const navigate = useNavigate()
   const initialValues = {
     title:"",
     desc:"",
-    author:"",
-    image:''
+    image:""
   }
 
   const onSubmit = async(data)=>{
+    
   let formData = new FormData()
   formData.append("title",data.title)
   formData.append("desc",data.desc)
-  formData.append("author",data.author)
+  formData.append("author",auth.username)
+  formData.append("UserId",auth.id)
   formData.append("image",image)
   
-  console.log(formData)
-  await axios.post("http://localhost:4001/posts/addPost", formData)
+  
+  await axios.post("http://localhost:4001/posts/addPost",
+   formData,{headers:{
+    accessToken:localStorage.getItem('accessToken')
+   }})
   .then((res) => {
     navigate("/")})
   }
@@ -36,7 +38,6 @@ const AddNewPost = () => {
   const  validationSchema = Yup.object().shape({
     title:Yup.string().required("You must input a Title") ,
     desc:Yup.string().required(),
-    author:Yup.string().min(3).max(15).required(),
     image:Yup.mixed().nullable()
   })
   return (
@@ -51,9 +52,9 @@ const AddNewPost = () => {
           <ErrorMessage component="span" name='desc'/>
           <Field autoComplete='off' name="desc" />
           
-          <label htmlFor="author">Author: </label>
+          {/* <label htmlFor="author">Author: </label>
           <ErrorMessage component="span" name='author'/>
-          <Field autoComplete='off' name="author" />
+          <Field autoComplete='off' name="author" /> */}
           
           <label htmlFor="image">Image: </label>
           <ErrorMessage component="span" name='image'/>
@@ -61,7 +62,7 @@ const AddNewPost = () => {
            setImage(e.target.files[0])
           }} />
           {/* <Button type="submit" variant="primary" className='mt-2'>Create post</Button> */}
-          <button type='submit'>Create Post</button>
+          <button className='btn btn-primary' type='submit'>Create Post</button>
         </Form>
 
       </Formik>
