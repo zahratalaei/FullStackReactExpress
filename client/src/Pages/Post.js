@@ -4,14 +4,14 @@ import { Image } from 'react-bootstrap'
 import axios from 'axios'
 import defaultImage from '../images/default.jpg'
 import idPhoto from "../images/defaultId.jpg"
-// import { AuthContext } from '../helper/AuthContext'
+import { AuthContext } from '../helper/AuthContext'
 
 const Post = () => {
     const {id} = useParams()
     const[post,setPost] = useState({})
     const[comments,setComments] = useState([])
     const[newComment,setNewComment] = useState('')
-    // const{auth} = useContext(AuthContext)
+    const{auth} = useContext(AuthContext)
 
      useEffect(()=>{
           axios.get(`http://localhost:4001/posts/post/${id}`)
@@ -34,12 +34,14 @@ const Post = () => {
         if(res.data.error){
           alert(res.data.error)
         }else{
-          const commentToAdd = {commentBody:newComment, commenter:res.data.commenter}
+          const commentToAdd = {commentBody:newComment,username:auth.username}
+          console.log(commentToAdd)
           setComments([...comments,commentToAdd])
+         
           setNewComment('')
         }
       } )
-
+      
      }
      //delete comment
      const deleteComment = (id)=>{
@@ -59,7 +61,7 @@ const Post = () => {
      <h2>{post.title}</h2>
      <p>{post.desc}</p>
      {/* <label htmlFor="">Created by: {post.author}</label> */}
-     <a href="#" class="icon-link mr-3"><i class="fa fa-pencil-square-o"></i>{post.author}</a>
+     <a href="#" className="icon-link mr-3"><i className="fa fa-pencil-square-o"></i>{post.author}</a>
      </div>
      <div className="comment mt-4">
       <h6>Leave your comment</h6>
@@ -72,12 +74,12 @@ const Post = () => {
         </div>
         <div className="listOfComments mt-5">
           
-          {comments.map((comment) =>(
-            <div key={comment.id} className="border border-3 col-6 col-sm-10 px-2 rounded mt-1 py-1">
+          {comments.length > 0 && comments.map((comment) =>(
+            <div key={comment.index} className="border border-3 col-6 col-sm-10 px-2 rounded mt-1 py-1">
               <img src={idPhoto} width="30" className="user-img rounded-circle mr-2"></img>
               <span >
-                <small className="fw-bold text-primary mx-1">{comment.commenter}</small>
-                <small className="fw-bold">{comment.commentBody}</small><small>{comment.id}</small>
+                <small className="fw-bold text-primary mx-1">{comment.username}</small>
+                <small className="fw-bold">{comment.commentBody}</small>
                 <button className='btn btn-close float-end mt-1' 
                 aria-label="Close" data-toggle="tooltip" title="Remove"
                 onClick={()=>deleteComment(comment.id)}></button>

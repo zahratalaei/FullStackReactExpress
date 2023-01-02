@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router()
-const {Comments, Users} = require('../models')
+const {Comments, Users, sequelize} = require('../models')
 const {validateToken} = require('../middlewares/AuthMiddleware')
-const { json } = require('sequelize')
+const { QueryTypes } = require('sequelize')
 
 // get comments
-router.get('/', async (req,res)=>{
-     const comments = await Comments.findAll()
+router.get('/',  (req,res)=>{          
+          const comments =  sequelize.query("SELECT a.*,b.photo,b.username FROM Comments a JOIN Users b ON a.UserId = b.id")
      res.json(comments)
 })
 // add a comment
@@ -20,7 +20,9 @@ router.post('/addComment', validateToken, async (req,res)=>{
 // get comments by postId
 router.get('/:postId',async(req,res)=>{
      const postId = req.params.postId
-     const comments = await Comments.findAll({where:{PostId : postId},includes:[Users]})
+     // const comments = await Comments.findAll({where:{PostId : postId},includes:[Users]})
+     const comments = await sequelize.query(`SELECT a.*,b.photo,b.username FROM Comments a JOIN Users b ON a.UserId = b.id AND PostId = ${postId}`,{type:QueryTypes.SELECT})
+     
      res.json(comments)
 })
 

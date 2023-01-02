@@ -4,13 +4,13 @@ module.exports = (sequelize,DataTypes)=>{
                type:DataTypes.STRING,
                allowNull: false,
           },
-          commenter:{
-               type: DataTypes.STRING,
-               allowNull:false
-          }
+          // commenter:{
+          //      type: DataTypes.STRING,
+          //      allowNull:false
+          // }
      })
-     Comments.associate = (models) =>{
-          Comments.belongsTo(models.Users)
-     }
+     // Comments.associate = (models) =>{
+     //      Comments.belongsTo(models.Users)
+     // }
      return Comments
 }
