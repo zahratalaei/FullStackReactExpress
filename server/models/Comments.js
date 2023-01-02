@@ -9,5 +9,8 @@ module.exports = (sequelize,DataTypes)=>{
                allowNull:false
           }
      })
+     Comments.associate = (models) =>{
+          Comments.belongsTo(models.Users)
+     }
      return Comments
 }

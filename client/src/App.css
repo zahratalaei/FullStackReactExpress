@@ -5,3 +5,6 @@
 form span { 
   color: red;
 }
+p.card-text {
+  height: 100px;
+}

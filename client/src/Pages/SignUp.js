@@ -2,7 +2,9 @@ import React from 'react'
 import { Formik,Form,Field,ErrorMessage } from 'formik'
 import * as Yup from 'yup'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 const SignUp = () => {
+     const navigate = useNavigate()
      const initialValues = {
           username:'',
           password:'',
@@ -16,7 +18,7 @@ const SignUp = () => {
      const onSubmit = (data)=>{
            axios.post('http://localhost:4001/auth',data)
           .then(res =>{
-               console.log("signed in")
+               navigate("/signIn")
           })
 
      }
@@ -26,11 +28,11 @@ const SignUp = () => {
      <Form className='d-flex flex-column justify-content-center col-sm-8 col-md-6 col-lg-4 rounded border border-3 border-primary p-2'>
                <label htmlFor='username'>Username: </label>
                <ErrorMessage component="span" name="username" />
-               <Field name="username" autoComplete="off"  />
+               <Field name="username" autoComplete="off" className="p-1 rounded"  />
                
                <label htmlFor='password'>Password: </label>
                <ErrorMessage component='span' name="password" />
-               <Field name="password" autoComplete="off" type="password"/>
+               <Field name="password" autoComplete="off" type="password"  className="p-1 rounded"/>
 
                <button className='mt-2 btn btn-primary' type='submit'>Sign up!</button>
           </Form>
