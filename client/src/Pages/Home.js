@@ -6,6 +6,7 @@ import {Row,Col, Container} from 'react-bootstrap'
 
 const Home = () => {
      const [posts,setPosts] = useState([])
+     console.log();
   useEffect(()=>{
     
     axios.get('http://localhost:4001/posts')
@@ -18,7 +19,7 @@ const Home = () => {
     <Container fluid={"md"} className="mt-5">
     <Row xs={1} md={3} lg={4}>
     
-        {posts.map(post => (
+        {posts.length > 0 && posts.map(post => (
            <Col md={6} lg={4} sm={12} key={post.id}>
           <PostCard post={post}/>
            </Col>
