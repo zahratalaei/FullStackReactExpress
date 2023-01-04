@@ -4,7 +4,7 @@ const {Posts} = require('../models')
 const multer = require('multer')
 const path = require('path')
 const { validateToken } = require('../middlewares/AuthMiddleware')
-
+const fs = require('fs')
 //upload image function
 const storage = multer.diskStorage({
      destination:(req,file,cb)=>{
@@ -60,5 +60,27 @@ router.get('/post/:id',async (req,res)=>{
      const id = req.params.id;
      const post = await Posts.findByPk(id)
      res.json(post)
+})
+
+// delete a post by id
+router.delete('/post/:id',validateToken, async(req,res) => {
+     const id = req.params.id;
+     const post = await Posts.findByPk(id)
+     fs.unlinkSync (post.image)
+     await Posts.destroy({where:{id:id}})
+     res.json("Deleted successfully")
+})
+
+// edit postTitle
+router.put('/title',validateToken, async (req,res) => {
+     const {newTitle, id} = req.body
+     await Posts.update({title:newTitle},{where:{id:id}})
+     res.json(newTitle)
+})
+//edit postDesc
+router.put('/desc', validateToken, async(req,res)=>{
+     const{newDesc, id} = req.body
+     await Posts.update({desc:newDesc},{where:{id:id}})
+     res.json(newDesc)
 })
 module.exports = router

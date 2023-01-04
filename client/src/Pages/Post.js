@@ -1,9 +1,10 @@
 import React, { useContext, useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { Image } from 'react-bootstrap'
 import axios from 'axios'
 import defaultImage from '../images/default.jpg'
 import idPhoto from "../images/defaultId.jpg"
+import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import { AuthContext } from '../helper/AuthContext'
 
 const Post = () => {
@@ -11,15 +12,22 @@ const Post = () => {
     const[post,setPost] = useState({})
     const[comments,setComments] = useState([])
     const[newComment,setNewComment] = useState('')
+    const[likedPost,setLikedPost] = useState([])
     const{auth} = useContext(AuthContext)
-
+    const navigate = useNavigate()
      useEffect(()=>{
           axios.get(`http://localhost:4001/posts/post/${id}`)
           .then(res => setPost(res.data))
           axios.get(`http://localhost:4001/comments/${id}`)
           .then(res => setComments(res.data))
+          axios.get(`http://localhost:4001/likes/${id}`,)
+          .then((res)=>{
+            setLikedPost( res.data.map(like=>{return like.UserId}) )
+           })
           
      },[]) 
+     console.log(likedPost)
+
     //add comment
      const addComment = ()=>{
       axios.post(`http://localhost:4001/comments/addComment`,{
@@ -34,7 +42,7 @@ const Post = () => {
         if(res.data.error){
           alert(res.data.error)
         }else{
-          const commentToAdd = {commentBody:newComment,username:auth.username}
+          const commentToAdd = {commentBody:newComment, username:auth.username}
           console.log(commentToAdd)
           setComments([...comments,commentToAdd])
          
@@ -54,17 +62,70 @@ const Post = () => {
         }))
       } )
      }
+     //delete post
+     const deletePost = (id) => {
+      axios.delete(`http://localhost:4001/posts/post/${id}`,{headers:{
+        accessToken: localStorage.getItem("accessToken")
+      }})
+      .then((res)=>{
+        console.log("deleted post")
+        navigate('/')
+      })
+
+     }
+
+     //edit post
+     const editPost = (option) =>{
+      console.log("edit")
+      if(option === "title"){
+        const newTitle = prompt("Write new title",post.title)
+        axios.put(`http://localhost:4001/posts/title`,{newTitle:newTitle, id:id},{headers:{
+          accessToken: localStorage.getItem('accessToken')
+        }}).then(()=>{
+          setPost({...post, title:newTitle})
+        })
+      }else{
+        const newDesc = prompt("Write new description", post.desc)
+        axios.put(`http://localhost:4001/posts/desc`,{newDesc:newDesc,id:id},{headers:{
+          accessToken: localStorage.getItem('accessToken')
+        }}).then(()=>{
+          setPost({...post, desc:newDesc})
+        })
+      }
+
+     }
+
+     //like a post
+     const likeAPost = (id) =>{
+      axios.post(`http://localhost:4001/likes`,{postId:id},{headers:{
+        accessToken:localStorage.getItem("accessToken")
+      }} ).then(()=>{
+        if(likedPost.includes(auth.id)){
+          setLikedPost(likedPost.filter(e=>( e !== auth.id)))
+        }else{
+          setLikedPost([...likedPost, auth.id])
+        }
+        
+      })
+     }
+
   return (
     <div className='container mt-3'>
      <div className='post'>
-     <Image src={(post.image!=="" | post.image !== null) ? `http://localhost:3000/${post.image}` :defaultImage } rounded responsive="true" className='col-10'/>
-     <h2>{post.title}</h2>
-     <p>{post.desc}</p>
-     {/* <label htmlFor="">Created by: {post.author}</label> */}
-     <a href="#" className="icon-link mr-3"><i className="fa fa-pencil-square-o"></i>{post.author}</a>
-     </div>
-     <div className="comment mt-4">
-      <h6>Leave your comment</h6>
+        <Image src={post.image!=="" ? `http://localhost:3000/${post.image}` :defaultImage } rounded responsive="true" className='col-10'/>
+        <div className='col-10 d-flex flex-row justify-content-between'  ><p onClick={()=>{auth.username === post.author && editPost("title")}}>{post.title}</p><div className='likesContainer'>
+          <label htmlFor="">{likedPost.length}</label> 
+          <ThumbUpIcon onClick={()=>{likeAPost(post.id)}} className={likedPost.includes(auth.id) ? "liked" :"unliked"}/>
+        </div>
+        </div>
+        <p className='col-10' onClick={()=>{auth.username === post.author && editPost("desc")}} >{post.desc}</p>
+        <div className="post-footer d-flex justify-content-between col-10">
+          <a href="#" className="icon-link mr-3"><i className="fa fa-pencil-square-o"></i>{post.author}</a>
+          {auth.username === post.author && <button className='btn btn-danger btn-sm float-end' onClick={()=>deletePost(post.id)}>Delete post</button>}
+        </div>
+      </div>
+      <div className="comment mt-4">
+        <h6>Leave your comment</h6>
         <div className="form-outline col-6 col-sm-10">
           <input type="text" className="form-control" id='addANote'
               rows="4" placeholder='Comment...' value={newComment}
@@ -73,16 +134,15 @@ const Post = () => {
           <button className='btn btn-sm btn-outline-primary mt-1 float-end' onClick={addComment}>Add</button>
         </div>
         <div className="listOfComments mt-5">
-          
           {comments.length > 0 && comments.map((comment) =>(
             <div key={comment.index} className="border border-3 col-6 col-sm-10 px-2 rounded mt-1 py-1">
               <img src={idPhoto} width="30" className="user-img rounded-circle mr-2"></img>
               <span >
                 <small className="fw-bold text-primary mx-1">{comment.username}</small>
                 <small className="fw-bold">{comment.commentBody}</small>
-                <button className='btn btn-close float-end mt-1' 
+                {auth.username === comment.username && <button className='btn btn-close float-end mt-1' 
                 aria-label="Close" data-toggle="tooltip" title="Remove"
-                onClick={()=>deleteComment(comment.id)}></button>
+                onClick={()=>deleteComment(comment.id)}></button>}
               </span>
             </div>
           ))}

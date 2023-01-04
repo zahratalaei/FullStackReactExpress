@@ -20,6 +20,9 @@ app.use('/comments', commentRouter)
 
 const userRouter = require('./routes/Users')
 app.use('/auth',userRouter)
+
+const likeRouter = require('./routes/Likes')
+app.use('/likes',likeRouter)
 //port
 const PORT = process.env.PORT || 4001
 

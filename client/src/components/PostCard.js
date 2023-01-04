@@ -18,7 +18,7 @@ const PostCard = ({post}) => {
                {/* <Link>
                {post.author}
                </Link> */}
-               <a href="#" class="icon-link mr-3"><i class="fa fa-pencil-square-o"></i>{post.author}</a>
+               <a href="#" className="icon-link mr-3"><i className="fa fa-pencil-square-o"></i>{post.author}</a>
                </Card.Footer>
           
      </Card>

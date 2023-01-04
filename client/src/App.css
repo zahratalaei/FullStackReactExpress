@@ -8,3 +8,10 @@ form span {
 p.card-text {
   height: 100px;
 }
+
+.liked {
+  color: rgba(201, 14, 14, 0.8);
+}
+.unliked {
+  color: rgb(129, 125, 125);
+}
