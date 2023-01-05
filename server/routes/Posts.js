@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const {Posts} = require('../models')
+const {Posts,Likes} = require('../models')
 const multer = require('multer')
 const path = require('path')
 const { validateToken } = require('../middlewares/AuthMiddleware')
@@ -31,10 +31,10 @@ const upload = multer({
      
 }).single('image')
 // get all posts
-router.get("/",async(req,res)=>{
-     const posts =await Posts.findAll()
-     // res.status(200).send(posts)
-     res.json(posts)
+router.get("/", validateToken, async(req,res)=>{
+     const posts = await Posts.findAll({include:[Likes]})
+     const likedPostsByUser = await Likes.findAll({where:{UserId : req.user.id}})
+     res.json({posts:posts, likedPostsByUser:likedPostsByUser})
 })
 
 // create new post
@@ -43,13 +43,10 @@ router.post("/addPost",validateToken, upload,async(req,res)=>{
           title: req.body.title,
           desc: req.body.desc,
           image: req.file.path,
-          // author: req.user.username,
-          // UserId:req.user.id
      }
      post.author = req.user.username
      post.UserId = req.user.id
      const posts = await Posts.create(post)
-     // res.status(200).send(posts)
      res.json(posts)
      console.log(post);
 
