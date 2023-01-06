@@ -1,11 +1,14 @@
 const express = require("express")
 const router = express.Router()
-const {Users, Comments} = require('../models')
+const {Users, Posts,sequelize} = require('../models')
 const multer = require('multer')
 const path = require('path')
 const bcrypt = require('bcrypt')
 const {sign} = require('jsonwebtoken')
 const { validateToken } = require("../middlewares/AuthMiddleware")
+const { QueryTypes } = require('sequelize')
+const fs = require('fs')
+
 //upload photo function
 const storage = multer.diskStorage({
      destination:(req,file,cb)=>{
@@ -64,5 +67,22 @@ router.get('/auth',validateToken,(req,res)=>{
      res.json(req.user)
 })
 
+//get user by id
+router.get('/:id', validateToken, async(req,res)=>{
+     const userId = req.params.id;
+     const user = await Users.findOne({where:{id:userId}})
+     const PostsByUser = await sequelize.query(`SELECT * FROM Users JOIN Posts ON Users.id = ${userId} AND Users.id = Posts.UserId`,{type:QueryTypes.SELECT})
+     res.json({User:user, PostsByUser:PostsByUser})
+})
+//update photo
+router.put('/updatePhoto',validateToken,upload, async(req,res) =>{
+     const photo = req.file.path
+     const user = await Users.findOne({where:{id:req.user.id}})
+     const oldPhoto = user.photo
+      Users.update({photo:photo},{where:{id:req.user.id}})
+      fs.unlinkSync (oldPhoto)
+     res.json("photo")
+     
+})
 
 module.exports = router

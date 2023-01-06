@@ -30,7 +30,7 @@ const Layout = () => {
                </>}
           </Nav>
                <div className='d-flex flex-row '>
-                <Link to="/" className='p-2'><h5>{auth.username}</h5></Link>
+                <Link to={`/profile/${auth.id}`} className='p-2'><h5>{auth.username}</h5></Link>
                 {(localStorage.getItem("accessToken")) && <button className='float-end rounded-4 btn btn-light' onClick={signOut}><h5>Sign out</h5></button>}
                </div>
      </Container>
