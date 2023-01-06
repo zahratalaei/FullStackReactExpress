@@ -6,7 +6,7 @@ import defaultImage from '../images/default.jpg'
 import idPhoto from "../images/defaultId.jpg"
 import ThumbUpIcon from '@mui/icons-material/ThumbUp'
 import { AuthContext } from '../helper/AuthContext'
-
+import HistoryEduIcon from '@mui/icons-material/HistoryEdu';
 const Post = () => {
     const {id} = useParams()
     const[post,setPost] = useState({})
@@ -78,7 +78,7 @@ const Post = () => {
      const editPost = (option) =>{
       console.log("edit")
       if(option === "title"){
-        const newTitle = prompt("Write new title",post.title)
+        const newTitle = prompt("Write new title", post.title)
         axios.put(`http://localhost:4001/posts/title`,{newTitle:newTitle, id:id},{headers:{
           accessToken: localStorage.getItem('accessToken')
         }}).then(()=>{
@@ -110,28 +110,32 @@ const Post = () => {
      }
 
   return (
-    <div className='container mt-3'>
-     <div className='post'>
-        <Image src={post.image!=="" ? `http://localhost:3000/${post.image}` :defaultImage } rounded responsive="true" className='col-10'/>
-        <div className='col-10 d-flex flex-row justify-content-between'  ><p onClick={()=>{auth.username === post.author && editPost("title")}}>{post.title}</p><div className='likesContainer'>
+    <div className='container-sm mt-3'>
+     <div className='post border rounded'>
+        <Image src={post.image!=="" ? `http://localhost:3000/${post.image}` :defaultImage } rounded responsive="true" className='w-100'/>
+        <div className=' d-flex flex-row justify-content-between'  ><p onClick={()=>{auth.username === post.author && editPost("title")}}>{post.title}</p><div className='likesContainer'>
           <label htmlFor="">{likedPost.length}</label> 
           <ThumbUpIcon onClick={()=>{likeAPost(post.id)}} className={likedPost.includes(auth.id) ? "liked" :"unliked"}/>
         </div>
         </div>
-        <p className='col-10' onClick={()=>{auth.username === post.author && editPost("desc")}} >{post.desc}</p>
-        <div className="post-footer d-flex justify-content-between col-10">
-          <a href="#" className="icon-link mr-3"><i className="fa fa-pencil-square-o"></i>{post.author}</a>
+        <p className='' onClick={()=>{auth.username === post.author && editPost("desc")}} >{post.desc}</p>
+        <div className="post-footer d-flex justify-content-between ">
+          <a href="#" className="mr-3 fw-bold">
+          {/* <a href="#" className="icon-link mr-3"> */}
+            {/* <i className="fa fa-pencil-square-o"></i> */}
+            <HistoryEduIcon />
+            {post.author}</a>
           {auth.username === post.author && <button className='btn btn-danger btn-sm float-end' onClick={()=>deletePost(post.id)}>Delete post</button>}
         </div>
       </div>
       <div className="comment mt-4">
-        <h6>Leave your comment</h6>
+        {/* <h6>Leave your comment</h6> */}
         <div className="form-outline col-6 col-sm-10">
           <input type="text" className="form-control" id='addANote'
-              rows="4" placeholder='Comment...' value={newComment}
+              rows="4" placeholder='Leave your comment...' value={newComment}
               onChange={(e)=>{setNewComment(e.target.value)}}
               />
-          <button className='btn btn-sm btn-outline-primary mt-1 float-end' onClick={addComment}>Add</button>
+          <button className='btn btn-sm btn-primary mt-1 float-end' onClick={addComment}>Add</button>
         </div>
         <div className="listOfComments mt-5">
           {comments.length > 0 && comments.map((comment) =>(

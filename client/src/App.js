@@ -10,6 +10,9 @@ import SignIn from './Pages/SignIn';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { AuthContext } from './helper/AuthContext';
+import PageNotFind from './Pages/PageNotFind';
+import Profile from './Pages/Profile';
+import UpdateProfile from './Pages/UpdateProfile';
 function App() {
   
   const [auth,setAuth] = useState({username:"", id:0, status:false})
@@ -35,6 +38,9 @@ function App() {
           <Route path='/post/:id' element={<Post/>} />
           <Route path='/signUp' element={<SignUp/>} />
           <Route path='/signIn' element={<SignIn/>} />
+          <Route path='/profile/:id' element={<Profile/>} />
+          <Route path='/updateProfile' element={<UpdateProfile/>} />
+          <Route path='*' element={<PageNotFind/>} />
         </Route>
       </Routes>
       </AuthContext.Provider>
