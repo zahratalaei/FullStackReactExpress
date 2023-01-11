@@ -80,9 +80,23 @@ router.put('/updatePhoto',validateToken,upload, async(req,res) =>{
      const user = await Users.findOne({where:{id:req.user.id}})
      const oldPhoto = user.photo
       Users.update({photo:photo},{where:{id:req.user.id}})
-      fs.unlinkSync (oldPhoto)
+      if(oldPhoto){fs.unlinkSync (oldPhoto)}
      res.json("photo")
      
+})
+
+//change password
+router.put('/changePassword',validateToken,async(req,res) => {
+     const {oldPassword, newPassword } = req.body
+     const user = await Users.findOne({where:{id:req.user.id}})
+     bcrypt.compare(oldPassword,user.password).then((match)=>{
+          if(!match) res.json({error:"Wrong old password entered"})
+          bcrypt.hash(newPassword,10).then((hash) => {
+               Users.update({password:hash},{where:{id:req.user.id}})
+               res.json("success")
+          })
+     })
+
 })
 
 module.exports = router
