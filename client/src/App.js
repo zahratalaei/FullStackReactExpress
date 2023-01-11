@@ -12,7 +12,7 @@ import axios from 'axios';
 import { AuthContext } from './helper/AuthContext';
 import PageNotFind from './Pages/PageNotFind';
 import Profile from './Pages/Profile';
-import UpdateProfile from './Pages/UpdateProfile';
+import ChangePassword from './Pages/ChangePassword';
 function App() {
   
   const [auth,setAuth] = useState({username:"", id:0, status:false})
@@ -39,7 +39,7 @@ function App() {
           <Route path='/signUp' element={<SignUp/>} />
           <Route path='/signIn' element={<SignIn/>} />
           <Route path='/profile/:id' element={<Profile/>} />
-          <Route path='/updateProfile' element={<UpdateProfile/>} />
+          <Route path='/changePassword' element={<ChangePassword/>} />
           <Route path='*' element={<PageNotFind/>} />
         </Route>
       </Routes>

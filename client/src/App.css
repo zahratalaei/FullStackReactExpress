@@ -15,3 +15,7 @@ p.card-text {
 .unliked {
   color: rgb(129, 125, 125);
 }
+
+.profile-photo{
+  max-height: 200px;
+}

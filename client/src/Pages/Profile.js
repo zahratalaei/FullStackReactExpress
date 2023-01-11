@@ -12,7 +12,7 @@ const Profile = () => {
      const[user, setUser] = useState({})
      const[posts, setPosts] = useState([])
      const[photo, setPhoto] = useState('')
-     const[preview, setPreview] = useState()
+     const[preview, setPreview] = useState('')
      
      
      useEffect(()=>{
@@ -27,6 +27,7 @@ const Profile = () => {
      
      
      const uploadHandler = () => {
+          
           let formData = new FormData()
           formData.append("photo",photo)
           
@@ -42,19 +43,28 @@ const Profile = () => {
           setPhoto(e.target.files[0])
            setPreview(URL.createObjectURL(e.target.files[0]))
      }
+     console.log(preview);
   return (
-    <div className=''>
-          <div className="photoContainer d-flex flex-column m-3">
-          <Image src={!preview ? `http://localhost:3000/${user.photo}`:preview}  rounded className={`col-3 ${user.photo ? "d-block" : 'd-none'}`} />
-          <Image src={preview ? preview : idPhoto} rounded className={`col-3 ${user.photo!=="" ? "d-none" : 'd-block'}`} />
-          <form className='d-flex flex-column col-3 my-2'>
-          <input type="file" name='photo' placeholder='upload photo' onChange={onChangeInput}
-          />
-          <button className='btn btn-primary mt-1' type='submit' onClick={uploadHandler}> Save Photo</button>
-          </form>
-          <Link className='btn btn-dark col-3'>Change Password</Link>
+    <div className='p-5'>
+          <div className='d-flex flex-md-row flex-sm-column'>
+               <div className="photoContainer d-flex flex-column m-3 col-md-3 col-sm-6">
+                    <Image src={!preview ? `http://localhost:3000/${user.photo}`:preview}  rounded className={` ${user.photo ? "d-block" : 'd-none'} responsive`} style={{height:"300px", maxWidth:"400px",objectFit:"cover"}} />
+                    <Image src={preview ? preview : idPhoto} rounded className={`col-3 ${user.photo!=="" ? "d-none" : 'd-block'} responsive`} style={{height:"300px", maxWidth:"400px",objectFit:"cover"}} />
+               </div>
+               <div className='col-md-4 col-sm-8 d-flex flex-column justify-content-end'>
+                    <form className=' m-3' onSubmit={uploadHandler}>
+                         <label htmlFor="photo" className='form-label'>Change your photo</label>
+                         <input type="file" name='photo' placeholder='upload photo' onChange={onChangeInput}
+                         className='form-control' accept='.jpg, .png'
+                         />
+                         <button className='btn btn-primary mt-1 float-end' type='submit' disabled={!preview} > Save Photo</button>
+                    </form>
+                    <Link className='btn btn-dark m-3' to={'/changePassword'}>Change Password</Link>
+               </div>
           </div>
-          <div className="postsContainer">
+          <hr />
+          <div className="postsContainer mt-3">
+               <h3>Posts created by {user.username}</h3>
                <Row xs={1} md={3} lg={4}>
           
                {posts.length > 0 && posts.map(post => (
