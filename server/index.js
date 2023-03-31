@@ -4,7 +4,7 @@ app.use(express.json())
 const db= require('./models')
 const cors = require('cors')
 const path = require('path')
-// const fs = require('fs')
+require('dotenv').config()
 
 app.use(cors())
 
@@ -25,12 +25,14 @@ const likeRouter = require('./routes/Likes')
 app.use('/likes',likeRouter)
 //port
 const PORT = process.env.PORT || 4001
-
+ 
 //server
-db.sequelize.sync().then(()=>{
+db.sequelize.sync().then(( )=>{
      app.listen(PORT, ()=>{
           console.log(`server is running on port ${PORT}` )
      
      })
+}).catch((err)=> {
+     console.log(err)
 })
 
