@@ -2,7 +2,7 @@ import React, { useContext } from 'react'
 import {Outlet,Link, useNavigate} from 'react-router-dom'
 import {Container, Nav, Navbar} from 'react-bootstrap';
 import { AuthContext } from '../helper/AuthContext';
-
+import Logo from '../images/Logo.png'
 const Layout = () => {
   const {auth,setAuth} = useContext(AuthContext)
   const navigate = useNavigate()
@@ -16,7 +16,16 @@ const Layout = () => {
     <>
     <Navbar sticky='top' variant='dark' bg="dark" expand="sm">
      <Container>
-          <Navbar.Brand>Codes up</Navbar.Brand>
+     <Navbar.Brand href="/">
+            <img
+              src={Logo}
+              width="100"
+              height="100"
+              className="d-inline-block align-top"
+              alt="CircleUp logo"
+            />
+          </Navbar.Brand>
+          <Navbar.Brand>CircleUp!</Navbar.Brand>
           <Nav className='me-auto d-flex flex-row justify-content-evenly' >
             {(localStorage.getItem("accessToken")) ?
               <>               

@@ -43,7 +43,7 @@ router.post('/',async(req,res)=>{
           Users.create({
                username: username,
                password: hash,
-               // photo: photo
+               photo: ''
           })
           res.json("success")
      })
@@ -61,6 +61,16 @@ router.post('/signIn', async(req,res)=>{
           res.json({token:accessToken, username:username, id:user.id})
      })
 })
+
+//delete user by id
+router.delete('/:id',validateToken, async(req,res) => {
+     const userId = req.params.id;
+     const user = await Users.findOne({where:{id:userId}})
+     if(user.photo !=='') {fs.unlinkSync (user.photo)}
+     await Users.destroy({where:{id:userId}})
+     res.json("Deleted successfully")
+})
+
 
 //get user from validateToken
 router.get('/auth',validateToken,(req,res)=>{

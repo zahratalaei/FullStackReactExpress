@@ -16,17 +16,21 @@ const Home = () => {
       accessToken: localStorage.getItem("accessToken")
     }})
     .then(res=>{
-      setPosts(res.data.posts)
-      setLikedPostsByUser(res.data.likedPostsByUser.map((like)=>(like.PostId)))
-      })
-  },[])
+      
+      if(!res.data.error)
+     { setPosts(res.data.posts)
+      setLikedPostsByUser(res.data.likedPostsByUser.map((like)=>(like.PostId)))}else{setPosts([])}
+      }
+      )
 
+  },[])
+console.log(posts);
   
   return (
     <Container fluid={"md"} className="mt-5">
     <Row xs={1} md={3} lg={4}>
     
-        {posts.length > 0 && posts.map(post => (
+        {posts && posts.length > 0 && posts.map(post => (
            <Col md={6} lg={4} sm={12} key={post.id}>
           <PostCard post={post} auth={auth} setPosts={setPosts} />
            </Col>
