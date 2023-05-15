@@ -54,12 +54,16 @@ router.post('/',async(req,res)=>{
 router.post('/signIn', async(req,res)=>{
      const{username, password} =req.body;
      const user = await Users.findOne({where:{username:username}})
-     if(!user) {res.json({error:"User doesn't Exit"})}
-     bcrypt.compare(password,user.password).then((match)=>{
-          if(!match) res.json({error:"wrong Username and Password Combination"})
-          const accessToken = sign({username:user.username,id:user.id},"importantsecret")
-          res.json({token:accessToken, username:username, id:user.id})
-     })
+     if(!user) {res.json({error:"User doesn't Exit"})}else{
+
+          bcrypt.compare(password,user.password).then((match)=>{
+               if(!match) {res.json({error:"wrong Username and Password Combination"})}else{
+     
+                    const accessToken = sign({username:user.username,id:user.id},"importantsecret")
+                    res.json({token:accessToken, username:username, id:user.id})
+               }
+          })
+     }
 })
 
 //delete user by id
