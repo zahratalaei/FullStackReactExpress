@@ -16,7 +16,7 @@ const SignUp = () => {
           
      })
      const onSubmit = (data)=>{
-           axios.post('http://localhost:4001/auth',data)
+           axios.post(`${process.env.REACT_APP_SERVER_URL}/auth`,data)
           .then(res =>{
                navigate("/signIn")
           })

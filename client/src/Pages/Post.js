@@ -16,11 +16,11 @@ const Post = () => {
     const{auth} = useContext(AuthContext)
     const navigate = useNavigate()
      useEffect(()=>{
-          axios.get(`http://localhost:4001/posts/post/${id}`)
+          axios.get(`${process.env.REACT_APP_SERVER_URL}/posts/post/${id}`)
           .then(res => setPost(res.data))
-          axios.get(`http://localhost:4001/comments/${id}`)
+          axios.get(`${process.env.REACT_APP_SERVER_URL}/comments/${id}`)
           .then(res => setComments(res.data))
-          axios.get(`http://localhost:4001/likes/${id}`,)
+          axios.get(`${process.env.REACT_APP_SERVER_URL}/likes/${id}`,)
           .then((res)=>{
             setLikedPost( res.data.map(like=>{return like.UserId}) )
            })
@@ -30,7 +30,7 @@ const Post = () => {
 
     //add comment
      const addComment = ()=>{
-      axios.post(`http://localhost:4001/comments/addComment`,{
+      axios.post(`${process.env.REACT_APP_SERVER_URL}/comments/addComment`,{
         commentBody:newComment,
         PostId:id,
       },{
@@ -53,7 +53,7 @@ const Post = () => {
      }
      //delete comment
      const deleteComment = (id)=>{
-      axios.delete(`http://localhost:4001/comments/${id}`,{headers:{
+      axios.delete(`${process.env.REACT_APP_SERVER_URL}/comments/${id}`,{headers:{
         accessToken: localStorage.getItem("accessToken")
       }})
       .then(() =>{
@@ -64,7 +64,7 @@ const Post = () => {
      }
      //delete post
      const deletePost = (id) => {
-      axios.delete(`http://localhost:4001/posts/post/${id}`,{headers:{
+      axios.delete(`${process.env.REACT_APP_SERVER_URL}/posts/post/${id}`,{headers:{
         accessToken: localStorage.getItem("accessToken")
       }})
       .then((res)=>{
@@ -79,14 +79,14 @@ const Post = () => {
       console.log("edit")
       if(option === "title"){
         const newTitle = prompt("Write new title", post.title)
-        axios.put(`http://localhost:4001/posts/title`,{newTitle:newTitle, id:id},{headers:{
+        axios.put(`${process.env.REACT_APP_SERVER_URL}/posts/title`,{newTitle:newTitle, id:id},{headers:{
           accessToken: localStorage.getItem('accessToken')
         }}).then(()=>{
           setPost({...post, title:newTitle})
         })
       }else{
         const newDesc = prompt("Write new description", post.desc)
-        axios.put(`http://localhost:4001/posts/desc`,{newDesc:newDesc,id:id},{headers:{
+        axios.put(`${process.env.REACT_APP_SERVER_URL}/posts/desc`,{newDesc:newDesc,id:id},{headers:{
           accessToken: localStorage.getItem('accessToken')
         }}).then(()=>{
           setPost({...post, desc:newDesc})
@@ -97,7 +97,7 @@ const Post = () => {
 
      //like a post
      const likeAPost = (id) =>{
-      axios.post(`http://localhost:4001/likes`,{postId:id},{headers:{
+      axios.post(`${process.env.REACT_APP_SERVER_URL}/likes`,{postId:id},{headers:{
         accessToken:localStorage.getItem("accessToken")
       }} ).then(()=>{
         if(likedPost.includes(auth.id)){

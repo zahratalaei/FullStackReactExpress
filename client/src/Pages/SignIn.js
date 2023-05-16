@@ -6,15 +6,16 @@ import { AuthContext } from '../helper/AuthContext'
 const SignIn = () => {
      const [username, setUsername] = useState('')
      const [password, setPassword] = useState('')
-     const {setAuth} = useContext(AuthContext)
+     const {setAuth,auth} = useContext(AuthContext)
 
      const navigate = useNavigate()
      const signIn = ()=>{
           const data = {username:username, password:password}
-          axios.post('http://localhost:4001/auth/signIn',data)
+          axios.post(`${process.env.REACT_APP_SERVER_URL}/auth/signIn`,data)
           .then((res)=>{
                if(res.data.error){
                     alert(res.data.error)
+                    console.log(auth);
                }else{
                     localStorage.setItem("accessToken",res.data.token)  
                     setAuth({username:res.data.username, id:res.data.id, status:true})          

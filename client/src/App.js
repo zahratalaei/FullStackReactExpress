@@ -17,7 +17,7 @@ function App() {
   
   const [auth,setAuth] = useState({username:"", id:0, status:false})
   useEffect(()=>{
-    axios.get('http://localhost:4001/auth/auth',{
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/auth/auth`,{
       headers:{
         accessToken: localStorage.getItem("accessToken")
       }

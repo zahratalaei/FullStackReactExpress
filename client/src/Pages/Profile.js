@@ -20,7 +20,7 @@ const Profile = () => {
      const handleShowModal = () => setShow(true);
      const navigate = useNavigate()
      const handleDelete = (id) =>{
-          axios.delete(`http://localhost:4001/auth/${id}`,{headers:{accessToken: localStorage.getItem("accessToken")}})
+          axios.delete(`${process.env.REACT_APP_SERVER_URL}/auth/${id}`,{headers:{accessToken: localStorage.getItem("accessToken")}})
           .then(res=>{
                console.log("user deleted");
                localStorage.removeItem("accessToken")
@@ -33,7 +33,7 @@ const Profile = () => {
      }
 
      useEffect(()=>{
-          axios.get(`http://localhost:4001/auth/${id}`,{headers:{
+          axios.get(`${process.env.REACT_APP_SERVER_URL}/auth/${id}`,{headers:{
                accessToken: localStorage.getItem("accessToken")
           }}).then((res)=>{
                setUser(res.data.User)
@@ -48,7 +48,7 @@ const Profile = () => {
           let formData = new FormData()
           formData.append("photo",photo)
           
-          axios.put(`http://localhost:4001/auth/updatePhoto`, formData,
+          axios.put(`${process.env.REACT_APP_SERVER_URL}/auth/updatePhoto`, formData,
           {headers:{
                accessToken: localStorage.getItem("accessToken")
           }}).then((res)=>{

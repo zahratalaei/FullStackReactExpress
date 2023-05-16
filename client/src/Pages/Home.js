@@ -12,7 +12,7 @@ const Home = () => {
      
   useEffect(()=>{
     
-    axios.get('http://localhost:4001/posts',{headers:{
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/posts`,{headers:{
       accessToken: localStorage.getItem("accessToken")
     }})
     .then(res=>{

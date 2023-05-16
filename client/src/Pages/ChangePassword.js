@@ -6,7 +6,7 @@ const ChangePassword = () => {
      const [newPassword, setNewPassword] = useState()
 
      const changePassword = () => {
-          axios.put(`http://localhost:4001/auth/changePassword`,{oldPassword:oldPassword, newPassword:newPassword} , {headers:{
+          axios.put(`${process.env.REACT_APP_SERVER_URL}/auth/changePassword`,{oldPassword:oldPassword, newPassword:newPassword} , {headers:{
                accessToken: localStorage.getItem('accessToken')
           }}).then((res)=>{
                if(res.data.error){

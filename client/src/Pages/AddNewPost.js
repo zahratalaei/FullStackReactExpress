@@ -27,7 +27,7 @@ const AddNewPost = () => {
   formData.append("image",image)
   
   
-  await axios.post("http://localhost:4001/posts/addPost",
+  await axios.post(`${process.env.REACT_APP_SERVER_URL}/posts/addPost`,
    formData,{headers:{
     accessToken:localStorage.getItem('accessToken')
    }})
