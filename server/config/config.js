@@ -8,6 +8,10 @@ module.exports ={
     //add port for dockerising 
     // "port":"3306",
     "dialect": "mysql",
+    "ssl": {
+      rejectUnauthorized: true,
+    },
+    
   },
   "test": {
     "username": process.env.DB_USER,
