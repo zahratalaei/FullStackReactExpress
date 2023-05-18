@@ -7,10 +7,12 @@ module.exports ={
     "host": process.env.DB_HOST,
     //add port for dockerising 
     // "port":"3306",
+    "ssl":true,
+    "ssl_ca":"/path/to/ca.pem",
     "dialect": "mysql",
-    "ssl": {
-      rejectUnauthorized: true,
-    },
+    // "ssl": {
+    //   rejectUnauthorized: true,
+    // },
     
   },
   "test": {
