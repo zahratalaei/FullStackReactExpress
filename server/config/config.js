@@ -26,6 +26,8 @@ module.exports ={
     "database": process.env.DB_NAME,
     "host": process.env.DB_HOST,
     "dialect": "mysql",
+    "ssl":true,
+    "ssl_ca":"/path/to/ca.pem",
     "dialectOptions": {
       ssl: {
         rejectUnauthorized: true,
