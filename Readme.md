@@ -6,6 +6,7 @@ CircleUp is an ongoing project that aims to develop a full-stack social media ap
 
 - **User Creation:** The application allows users to register and create personalized profiles, providing a unique space for individual users on the platform.
 - **Posting Functionality:** CircleUp enables users to share thoughts, ideas, or updates through posts, thereby fostering interactive communication.
+- **Commenting Functionality:** CircleUp enables users to add/delete comments for each posts.
 - **Liking Functionality:** To promote community engagement, the application includes a liking functionality. This allows users to interact with posts and show appreciation for the shared content.
 - **Search Capability:** A robust search function is built into the app, which allows users to efficiently find specific content or users on the platform.
 - **Continuous Development:** This application is under active development. I am continuously adding new features and enhancements to improve the overall user experience and functionality.
